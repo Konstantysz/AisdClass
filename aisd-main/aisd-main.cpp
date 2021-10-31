@@ -1,17 +1,19 @@
 #include <iostream>
-#include "LinkedList.h"
+#include "DataStructures.h"
 
 int main()
 {
-	auto list = aisd::LinkedList<int>();
+	auto list = aisd::LinkedListWithTail<int>();
 
 	list.Insert(4);
-	list.PrintAll();
-
 	list.Insert(3);
 	list.Insert(1);
-	list.Insert(2);
+	list.InsertLast(2);
 	list.PrintAll();
+
+	auto queue = aisd::Queue<int>(10);
+	std::cout << queue.IsEmpty() << std::endl;
+	std::cout << queue.IsFull() << std::endl;
 
 	return 0;
 }
