@@ -36,6 +36,4 @@ int main()
 	auto end2 = std::chrono::steady_clock::now();
 	std::cout << "Execution time = " << std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin2).count() << "[ns]" << std::endl;
 	heap2.PrintAll();
-
-	return 0;
 }

@@ -145,6 +145,11 @@
   <ItemGroup>
     <ClCompile Include="AisdMain.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AisdDataStructures\AisdDataStructures.vcxproj">
+      <Project>{68cae7d3-ff7c-434f-9a84-b48b8186c5e2}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
