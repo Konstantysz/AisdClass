@@ -67,6 +67,95 @@ namespace aisd
 			delete[] A;
 		}
 
+		/*! Method to add values to heap from top.
+			\param[in] values Array of values to be stored in the heap.
+		*/
+		void StoreValuesFromTop(T values[])
+		{
+			int i = 0;
+			while (values[i])
+			{
+				Insert(values[i]);
+				UpHeap(i + 1);
+				i++;
+			}
+		}
+
+		/*! Method to add values to heap from bottom.
+			Prefered way to add elements to heap, as it has better time complexity.
+			\param[in] values Array of values to be stored in the heap.
+		*/
+		void StoreValuesFromBottom(T values[])
+		{
+			int i = 0;
+			while (values[i])
+			{
+				Insert(values[i]);
+				i++;
+			}
+			for (int i = hl / 2; i > 0; i--)
+			{
+				DownHeap(i);
+			}
+		}
+
+		// TODO: Write DelMax
+		/*! Method to delete element with maximal value.
+			\returns Heap element with maximal value.
+		*/
+		T DelMax()
+		{
+			return A[1];
+		}
+
+		// TODO: Write Search
+		/*! Method to search value index in heap.
+			\param[in] value Searched value.
+			\returns Index of the value in the heap.
+		*/
+		int Search(T v)
+		{
+			return -1;
+		}
+
+		//! Method to print all heap elements
+		void PrintAll()
+		{
+			if (hl == 0) return;
+
+			int lastInRowId = 1;
+
+			for (int i = 1; i <= hl; i++)
+			{
+				std::cout << A[i];
+				if (i == lastInRowId)
+				{
+					std::cout << std::endl;
+					lastInRowId = 2 * i + 1;
+				}
+				else if (i != hl)
+				{
+					std::cout << " | ";
+				}
+			}
+
+			std::cout << std::endl;
+		}
+
+		/*! Method to check if heap follows heap rules.
+			\returns Heap correctness.
+		*/
+		bool IsHeapCorrect()
+		{
+			for (int i = 1; i <= hl; i++)
+			{
+				if (2 * i <= hl && A[2 * i] > A[i]) return false;
+				if (2 * i + 1 <= hl && A[2 * i + 1] > A[i]) return false;
+			}
+
+			return true;
+		}
+
 	private:
 		/*! Method to store value in the heap at the end.
 			\param[in] v Value to store.
@@ -121,83 +210,6 @@ namespace aisd
 				i = k;
 			}
 			return;
-		}
-
-		//! Method to sort heap following heap rules.
-		void SortHeap()
-		{
-			for (int i = hl / 2; i > 0; i--)
-			{
-				DownHeap(i);
-			}
-		}
-
-	public:
-		/*! Method to add values to heap from top.
-			\param[in] values Array of values to be stored in the heap.
-		*/
-		void StoreValuesFromTop(T values[])
-		{
-			int i = 0;
-			while (values[i])
-			{
-				Insert(values[i]);
-				UpHeap(i + 1);
-				i++;
-			}
-		}
-
-		/*! Method to add values to heap from bottom.
-			Prefered way to add elements to heap, as it has better time complexity.
-			\param[in] values Array of values to be stored in the heap.
-		*/
-		void StoreValuesFromBottom(T values[])
-		{
-			int i = 0;
-			while (values[i])
-			{
-				Insert(values[i]);
-				i++;
-			}
-			SortHeap();
-		}
-
-		//! Method to print all heap elements
-		void PrintAll()
-		{
-			if (hl == 0) return;
-
-			int lastInRowId = 1;
-
-			for (int i = 1; i <= hl; i++)
-			{
-				std::cout << A[i];
-				if (i == lastInRowId)
-				{
-					std::cout << std::endl;
-					lastInRowId = 2 * i + 1;
-				}
-				else if (i != hl)
-				{
-					std::cout << " | ";
-				}
-			}
-
-			std::cout << std::endl;
-		}
-
-		/*! Method to check if heap follows heap rules.
-			\returns Heap correctness.
-		*/
-		bool ProperHeap()
-		{
-			for (int i = 1; i <= hl; i++)
-			{
-				if (2 * i <= hl && A[2 * i] > A[i]) return false;
-				if (2 * i + 1 <= hl && A[2 * i + 1] > A[i]) return false;
-			}
-
-			return true;
 		}
 	};
 } // namespace aisd
