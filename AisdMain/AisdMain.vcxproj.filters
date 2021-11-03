@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="aisd-main.cpp">
+    <ClCompile Include="AisdMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
