@@ -25,14 +25,14 @@ int main()
 
 	auto heap1 = aisd::Heap<int>(1000);
 	auto begin1 = std::chrono::steady_clock::now();
-	heap1.BuildHeapFromFromBottom(values);
+	heap1.StoreValuesFromBottom(values);
 	auto end1 = std::chrono::steady_clock::now();
 	std::cout << "Execution time = " << std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - begin1).count() << "[ns]" << std::endl;
 	heap1.PrintAll();
 
 	auto heap2 = aisd::Heap<int>(1000);
 	auto begin2 = std::chrono::steady_clock::now();
-	heap2.BuildHeapFromFromTop(values);
+	heap2.StoreValuesFromTop(values);
 	auto end2 = std::chrono::steady_clock::now();
 	std::cout << "Execution time = " << std::chrono::duration_cast<std::chrono::nanoseconds>(end2 - begin2).count() << "[ns]" << std::endl;
 	heap2.PrintAll();

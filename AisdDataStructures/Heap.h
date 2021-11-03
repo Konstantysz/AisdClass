@@ -1,32 +1,76 @@
 #pragma once
 #include <iostream>
+#include <stdexcept>
+
+
 #include "DataStructuresUtils.h"
+
+/*! \file Heap.h
+	Declares class used to implement heap data structure.
+*/
 
 namespace aisd
 {
+	/*! \class Heap
+		Class template implementing heap data structure.
+		\tparam T Type to work with.
+	*/
 	template <class T>
 	class Heap
 	{
-		T* A;
-		int hl;
-		int maxSize;
+		T* A; //!< Array in which heap is implemented.
+		int hl; //!< Last element index.
+		int maxSize; //!< Maximal number of values that can be stored in heap array.
 
 	public:
+		/*! Heap constructor with no stored values.
+			\param[in] arrSize Maximal number of stored values in the heap.
+		*/
 		Heap(int arrSize)
 		{
 			if(arrSize > 1) 
 			{
-				maxSize = arrSize;
-				A = new T[size_t(arrSize + 1)];
+				maxSize = arrSize - 1;
+				A = new T[arrSize];
 				hl = 0;
+			}
+			else
+			{
+				throw std::invalid_argument("Heap array size must be greater than 1!");
 			}
 		}
 
+		/*! Heap constructor with values from array.
+			\param[in] values Array of values to be stored in the heap.
+			\param[in] arrSize Maximal number of stored values in the heap.
+		*/
+		Heap(T values[], int arrSize)
+		{
+			arrSize++;
+			if (arrSize > 1)
+			{
+				maxSize = arrSize - 1;
+				A = new T[arrSize];
+				hl = 0;
+
+				StoreValuesFromBottom(values);
+			}
+			else 
+			{
+				throw std::invalid_argument("Heap array size must be greater than 1!");
+			}
+		}
+
+		//! Heap destructor
 		~Heap()
 		{
 			delete[] A;
 		}
 
+	private:
+		/*! Method to store value in the heap at the end.
+			\param[in] v Value to store.
+		*/
 		void Insert(T v)
 		{
 			if (hl == maxSize) return;
@@ -34,7 +78,91 @@ namespace aisd
 			A[hl + 1] = v;
 			hl++;
 		}
+	
+		/*! Method to push down element at specific index to position that will follow heap rules.
+			\param[in] v Starting index.
+		*/
+		void DownHeap(int i)
+		{
+			while (1)
+			{
+				if (2 * i > hl) return; // node doesn't have next elements
 
+				int k = 2 * i;
+
+				if (2 * i + 1 <= hl && A[2 * i + 1] > A[2 * i]) // right node has higher value than left
+				{
+					k = 2 * i + 1;
+				}
+
+				if (A[k] < A[i]) return; // both lower nodes have lower value
+
+				aisd::utils::SwapValues<T>(A[i], A[k]);
+
+				i = k;
+			}
+		}
+
+		/*! Method to pull up element at specific index to position that will follow heap rules.
+			\param[in] v Starting index.
+		*/
+		void UpHeap(int i)
+		{
+			while (1)
+			{
+				if (i / 2 == 0) return; // node doesn't have next elements
+				
+				int k = i / 2;
+
+				if (A[k] > A[i]) return; // upper node has higher value
+
+				aisd::utils::SwapValues<T>(A[i], A[k]);
+
+				i = k;
+			}
+			return;
+		}
+
+		//! Method to sort heap following heap rules.
+		void SortHeap()
+		{
+			for (int i = hl / 2; i > 0; i--)
+			{
+				DownHeap(i);
+			}
+		}
+
+	public:
+		/*! Method to add values to heap from top.
+			\param[in] values Array of values to be stored in the heap.
+		*/
+		void StoreValuesFromTop(T values[])
+		{
+			int i = 0;
+			while (values[i])
+			{
+				Insert(values[i]);
+				UpHeap(i + 1);
+				i++;
+			}
+		}
+
+		/*! Method to add values to heap from bottom.
+			Prefered way to add elements to heap, as it has better time complexity.
+			\param[in] values Array of values to be stored in the heap.
+		*/
+		void StoreValuesFromBottom(T values[])
+		{
+			int i = 0;
+			while (values[i])
+			{
+				Insert(values[i]);
+				i++;
+			}
+			SortHeap();
+		}
+
+		//! Method to print all heap elements
 		void PrintAll()
 		{
 			if (hl == 0) return;
@@ -57,44 +185,10 @@ namespace aisd
 
 			std::cout << std::endl;
 		}
-	
-		void DownHeap(int i)
-		{
-			while (1)
-			{
-				if (2 * i > hl) return; // node doesn't have next elements
 
-				int k = 2 * i;
-
-				if (2 * i + 1 <= hl && A[2 * i + 1] > A[2 * i]) // right node has higher value than left
-				{
-					k = 2 * i + 1;
-				}
-
-				if (A[k] < A[i]) return; // both lower nodes have lower value
-
-				aisd::utils::SwapValues<T>(A[i], A[k]);
-
-				i = k;
-			}
-		}
-
-		void SortHeap()
-		{
-			for (int i = hl / 2; i > 0; i--)
-			{
-				DownHeap(i);
-			}
-
-			if (ProperHeap())
-			{
-				std::cout << "Heap is correct!" << std::endl;
-				return;
-			}
-
-			std::cout << "Incorrect heap!" << std::endl;
-		}
-
+		/*! Method to check if heap follows heap rules.
+			\returns Heap correctness.
+		*/
 		bool ProperHeap()
 		{
 			for (int i = 1; i <= hl; i++)
@@ -104,45 +198,6 @@ namespace aisd
 			}
 
 			return true;
-		}
-
-		void UpHeap(int i)
-		{
-			while (1)
-			{
-				if (i / 2 == 0) return; // node doesn't have next elements
-				
-				int k = i / 2;
-
-				if (A[k] > A[i]) return; // upper node has higher value
-
-				aisd::utils::SwapValues<T>(A[i], A[k]);
-
-				i = k;
-			}
-			return;
-		}
-
-		void BuildHeapFromFromTop(T values[])
-		{
-			int i = 0;
-			while (values[i])
-			{
-				Insert(values[i]);
-				UpHeap(i + 1);
-				i++;
-			}
-		}
-
-		void BuildHeapFromFromBottom(T values[])
-		{
-			int i = 0;
-			while (values[i])
-			{
-				Insert(values[i]);
-				i++;
-			}
-			SortHeap();
 		}
 	};
 } // namespace aisd
