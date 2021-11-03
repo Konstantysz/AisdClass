@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Beap.h" />
     <ClInclude Include="DataStructures.h" />
     <ClInclude Include="DataStructuresUtils.h" />
     <ClInclude Include="framework.h" />
